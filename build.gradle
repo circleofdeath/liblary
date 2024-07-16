@@ -1,0 +1,54 @@
+//file:noinspection ConfigurationAvoidance
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.2-SNAPSHOT'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.library'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+// Мій інтернет не може заванжити testImplementation-ни, занабто великі
+// Я знаю що вони важать по 100КБ але коли швидкість 5біт/год то це займає 10 років
+sourceSets {
+	test {
+		java.srcDirs = []
+		resources.srcDirs = []
+	}
+}
+
+ext {
+	springVersion = ''
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+	implementation 'org.postgresql:postgresql:42.7.2'
+	implementation 'com.google.code.gson:gson:2.11.0'
+	implementation "org.springframework.boot:spring-boot-starter$springVersion"
+	implementation "org.springframework.boot:spring-boot-starter-web$springVersion"
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa$springVersion"
+
+	compileOnly 'org.projectlombok:lombok:1.18.34'
+	annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+	runtimeOnly "com.h2database:h2"
+}
+
+task printClasspath {
+	doLast {
+		println sourceSets.main.runtimeClasspath.asPath
+	}
+}

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Для запуску треба мати linux з gnome-terminal
+# Якщо ви використовуйте windows то запусти оба процеси через IDE
+# Або перепеши під Windows цей скрипт, chatGPT може допоможе це зробити
+# Потребує java 21
+# Скрипт для тестування програми
+
+JAVA_HOME="/home/delta_alpha/.jdks/corretto-21.0.3"
+export JAVA_HOME
+
+./gradlew build
+
+CLASS_PATH=$(./gradlew -q printClasspath)
+JAVA="$JAVA_HOME/bin/java"
+
+gnome-terminal -- bash -c "$JAVA -cp $CLASS_PATH com.liblary.liblary.LiblaryApplication; read -p 'Press Enter to close...'; exec bash"
+gnome-terminal -- bash -c "$JAVA -cp $CLASS_PATH com.liblary.app.LiblaryKonsole; read -p 'Press Enter to close...'; exec bash"
